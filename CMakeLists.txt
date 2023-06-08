@@ -3,4 +3,4 @@ project(SASM)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(SASM main.cpp)
+add_executable(SASM main.cpp src/Tokenizer/TokenClass.cpp src/Tokenizer/TokenClass.h)

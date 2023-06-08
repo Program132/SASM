@@ -68,6 +68,7 @@ namespace SASM::Tokenizer {
                     break;
             }
         }
+        OverToken(current_token, Tokens);
         return Tokens;
     }
 

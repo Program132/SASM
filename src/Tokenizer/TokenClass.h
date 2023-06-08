@@ -10,6 +10,7 @@ namespace SASM::Tokenizer {
         IDENTIFIANT,
         INT,
         OPERATOR,
+        POSSIBLE_REGISTER
     };
 
     inline constexpr const char *sAllTokenTypes[] {
@@ -17,6 +18,7 @@ namespace SASM::Tokenizer {
             "IDENTIFIANT",
             "INT",
             "OPERATOR",
+            "POSSIBLE_REGISTER"
     };
 
     class Token {

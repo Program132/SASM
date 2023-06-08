@@ -30,6 +30,9 @@ namespace SASM::Tokenizer {
                         OverToken(current_token, Tokens);
                         current_token.TokenType = INT;
                         current_token.TokenContent.append(1, element);
+                    } else if (current_token.TokenType == POSSIBLE_REGISTER) {
+                        current_token.TokenContent.append(1, element);
+                        OverToken(current_token, Tokens);
                     } else {
                         current_token.TokenContent.append(1, element);
                     }
@@ -52,8 +55,13 @@ namespace SASM::Tokenizer {
                 default:
                     if (current_token.TokenType == WHITESPACE || current_token.TokenType == INT) {
                         OverToken(current_token, Tokens);
-                        current_token.TokenType = IDENTIFIANT;
-                        current_token.TokenContent.append(1, element);
+                        if (element == 'R') {
+                            current_token.TokenType = POSSIBLE_REGISTER;
+                            current_token.TokenContent.append(1, element);
+                        } else {
+                            current_token.TokenType = IDENTIFIANT;
+                            current_token.TokenContent.append(1, element);
+                        }
                     } else {
                         current_token.TokenContent.append(1, element);
                     }

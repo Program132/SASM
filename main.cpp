@@ -2,6 +2,7 @@
 #include <fstream>
 
 #include "src/Tokenizer/TokenClass.h"
+#include "src/Parser/Parser.h"
 
 int main(int argc, char** argv) {
     std::string pos_FileName;
@@ -26,6 +27,8 @@ int main(int argc, char** argv) {
     for (auto const& e : TokensCode) {
         std::cout << e << std::endl;
     }
+
+    SASM::Parser::MainParser(TokensCode);
 
     return 0;
 }

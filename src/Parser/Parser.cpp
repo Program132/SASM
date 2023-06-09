@@ -2,7 +2,39 @@
 
 namespace SASM::Parser {
     void Parser::LDRInstruction(std::vector<SASM::Tokenizer::Token> &Tokens, std::vector<Token>::iterator& currentToken, Data& data) {
+        auto possibleRegister = ExpectRegister(currentToken, Tokens);
+        bool pass = true;
 
+        if (!possibleRegister) {
+            std::cerr << "Forgot the register to put your int value!" << std::endl;
+            pass = false;
+        }
+
+        if (!ExpectOperator(currentToken, Tokens, ",").has_value()) {
+            std::cerr << "Forgot to put ',' after the register!" << std::endl;
+            pass = false;
+        }
+
+        auto possibleValue = ExpectValue(currentToken, Tokens);
+
+        if (!possibleValue.has_value()) {
+            std::cerr << "Forgot to give a case to save the register " << possibleRegister->TokenContent << "!" << std::endl;
+            pass = false;
+        }
+
+        auto memo = data.getMemory(std::stoi(possibleValue->TokenContent));
+        if (!memo.has_value()) {
+            std::cerr << "The memory " << possibleRegister->TokenContent << " has not value saved !" << std::endl;
+            pass = false;
+        }
+
+        if (pass) {
+            Register r(possibleRegister->TokenContent, memo->getValue());
+            r.setMemory(memo->getSlot());
+            std::cout << data.Registers[possibleRegister->TokenContent] << std::endl;
+            data.push_register(r);
+            std::cout << data.Registers[possibleRegister->TokenContent] << std::endl;
+        }
     }
 
     void Parser::STRInstruction(std::vector<SASM::Tokenizer::Token> &Tokens, std::vector<Token>::iterator& currentToken, Data& data) {

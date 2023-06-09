@@ -105,6 +105,9 @@ namespace SASM::Parser {
             } else if (instruction->TokenContent == "STR") {
                 STRInstruction(vector, currentToken, data);
                 return true;
+            } else if (instruction->TokenContent == "LDR") {
+                LDRInstruction(vector, currentToken, data);
+                return true;
             }
         }
         return false;

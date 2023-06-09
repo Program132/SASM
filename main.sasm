@@ -1,4 +1,7 @@
 MOV R0, #5
 STR R0, 100
+
 MOV R0, #10
+STR R0, 101
+
 LDR R0, 100

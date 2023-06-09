@@ -16,4 +16,11 @@ namespace SASM::Parser {
         }
         return std::nullopt;
     }
+
+    std::optional<Memory> Data::getMemory(const int &slot_memory) {
+        if (this->Memories.contains(slot_memory)) {
+            return this->Memories[slot_memory];
+        }
+        return std::nullopt;
+    }
 }

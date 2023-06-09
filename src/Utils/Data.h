@@ -18,6 +18,7 @@ namespace SASM::Parser {
         std::map<int, Memory> Memories;
 
         std::optional<Register> getRegister(const std::basic_string<char>& name);
+        std::optional<Memory> getMemory(const int &slot_memory);
         void push_register(Register r);
         void push_memory(Memory m);
     };

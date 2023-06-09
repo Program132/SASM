@@ -32,7 +32,6 @@ namespace SASM::Tokenizer {
                         current_token.TokenContent.append(1, element);
                     } else if (current_token.TokenType == POSSIBLE_REGISTER) {
                         current_token.TokenContent.append(1, element);
-                        OverToken(current_token, Tokens);
                     } else {
                         current_token.TokenContent.append(1, element);
                     }
@@ -49,6 +48,11 @@ namespace SASM::Tokenizer {
 
                 case ' ':
                 case '\t':
+                    OverToken(current_token, Tokens);
+                    break;
+
+                case '\n':
+                case '\r':
                     OverToken(current_token, Tokens);
                     break;
 

@@ -1,12 +1,112 @@
 #include "Parser.h"
 
 namespace SASM::Parser {
+    void Parser::SUBInstruction(std::vector<SASM::Tokenizer::Token> &Tokens, std::vector<Token>::iterator &currentToken, Data &data) {
+        auto possibleSavingRegister = ExpectRegister(currentToken, Tokens);
+        bool pass = true;
+
+        if (!possibleSavingRegister) {
+            std::cerr << "Forgot the register to put your int value!" << std::endl;
+            pass = false;
+        }
+
+        if (!ExpectOperator(currentToken, Tokens, ",").has_value()) {
+            std::cerr << "Forgot to put ',' after the register!" << std::endl;
+            pass = false;
+        }
+
+        auto possibleFirstRegister = ExpectRegister(currentToken, Tokens);
+
+        if (!possibleFirstRegister) {
+            std::cerr << "Forgot the register to do the addition!" << std::endl;
+            pass = false;
+        }
+
+        if (!ExpectOperator(currentToken, Tokens, ",").has_value()) {
+            std::cerr << "Forgot to put ',' after the register!" << std::endl;
+            pass = false;
+        }
+
+        auto possibleSecondRegister = ExpectRegister(currentToken, Tokens);
+
+        if (!possibleSecondRegister) {
+            std::cerr << "Forgot the register to do the addition!" << std::endl;
+            pass = false;
+        }
+
+        auto r1 = data.getRegister(possibleFirstRegister->TokenContent);
+        auto r2 = data.getRegister(possibleSecondRegister->TokenContent);
+
+        if (!r1.has_value() || !r2.has_value()) {
+            std::cerr << "Your registers " << possibleFirstRegister->TokenContent << " and " << possibleSecondRegister->TokenContent << " have not values!" << std::endl;
+            pass = false;
+        }
+
+        if (pass) {
+            int soustraction = std::stoi(r1->getValue()) - std::stoi(r2->getValue());
+            if (soustraction > 0) {
+                Register r(possibleSavingRegister->TokenContent, std::to_string(soustraction));
+                data.push_register(r);
+            } else {
+                std::cerr << "Your instruction SUB is not correct, it must be an int value !" << std::endl;
+            }
+        }
+    }
+
+    void Parser::ADDInstruction(std::vector<SASM::Tokenizer::Token> &Tokens, std::vector<Token>::iterator &currentToken, Data &data) {
+        auto possibleSavingRegister = ExpectRegister(currentToken, Tokens);
+        bool pass = true;
+
+        if (!possibleSavingRegister) {
+            std::cerr << "Forgot the register to put your int value!" << std::endl;
+            pass = false;
+        }
+
+        if (!ExpectOperator(currentToken, Tokens, ",").has_value()) {
+            std::cerr << "Forgot to put ',' after the register!" << std::endl;
+            pass = false;
+        }
+
+        auto possibleFirstRegister = ExpectRegister(currentToken, Tokens);
+
+        if (!possibleFirstRegister) {
+            std::cerr << "Forgot the register to do the addition!" << std::endl;
+            pass = false;
+        }
+
+        if (!ExpectOperator(currentToken, Tokens, ",").has_value()) {
+            std::cerr << "Forgot to put ',' after the register!" << std::endl;
+            pass = false;
+        }
+
+        auto possibleSecondRegister = ExpectRegister(currentToken, Tokens);
+
+        if (!possibleSecondRegister) {
+            std::cerr << "Forgot the register to do the addition!" << std::endl;
+            pass = false;
+        }
+
+        auto r1 = data.getRegister(possibleFirstRegister->TokenContent);
+        auto r2 = data.getRegister(possibleSecondRegister->TokenContent);
+
+        if (!r1.has_value() || !r2.has_value()) {
+            std::cerr << "Your registers " << possibleFirstRegister->TokenContent << " and " << possibleSecondRegister->TokenContent << " have not values!" << std::endl;
+            pass = false;
+        }
+
+        if (pass) {
+            int addition = std::stoi(r1->getValue()) + std::stoi(r2->getValue());
+            Register r(possibleSavingRegister->TokenContent, std::to_string(addition));
+            data.push_register(r);
+        }
+    }
+
     void Parser::LDRInstruction(std::vector<SASM::Tokenizer::Token> &Tokens, std::vector<Token>::iterator& currentToken, Data& data) {
         auto possibleRegister = ExpectRegister(currentToken, Tokens);
         bool pass = true;
 
         if (!possibleRegister) {
-            std::cerr << "Forgot the register to put your int value!" << std::endl;
+            std::cerr << "Forgot the register to get the value and set it in your register!" << std::endl;
             pass = false;
         }
 
@@ -31,9 +131,7 @@ namespace SASM::Parser {
         if (pass) {
             Register r(possibleRegister->TokenContent, memo->getValue());
             r.setMemory(memo->getSlot());
-            std::cout << data.Registers[possibleRegister->TokenContent] << std::endl;
             data.push_register(r);
-            std::cout << data.Registers[possibleRegister->TokenContent] << std::endl;
         }
     }
 
@@ -42,7 +140,7 @@ namespace SASM::Parser {
         bool pass = true;
 
         if (!possibleRegister) {
-            std::cerr << "Forgot the register to put your int value!" << std::endl;
+            std::cerr << "Forgot the register to save your value!" << std::endl;
             pass = false;
         }
 
@@ -140,6 +238,12 @@ namespace SASM::Parser {
             } else if (instruction->TokenContent == "LDR") {
                 LDRInstruction(vector, currentToken, data);
                 return true;
+            } else if (instruction->TokenContent == "ADD") {
+                ADDInstruction(vector, currentToken, data);
+                return true;
+            } else if (instruction->TokenContent == "SUB") {
+                SUBInstruction(vector, currentToken, data);
+                return true;
             }
         }
         return false;
@@ -157,5 +261,9 @@ namespace SASM::Parser {
                 continue;
             }
         }
+
+        /*for (auto const& e : dataLang.Registers) {
+            std::cout << "(" << e.first  << ", "<< e.second << ")" << std::endl;
+        }*/
      }
 }

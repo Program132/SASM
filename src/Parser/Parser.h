@@ -22,8 +22,10 @@ namespace SASM::Parser {
                            Data& data);
 
         // Instructions:
-        static void MOVInstruction(std::vector<SASM::Tokenizer::Token>& Tokens, std::vector<SASM::Tokenizer::Token>::iterator& currentToken, Data& data);
+        static void MOVInstruction(std::vector<SASM::Tokenizer::Token> &Tokens, std::vector<Token>::iterator& currentToken, Data& data);
         static void STRInstruction(std::vector<SASM::Tokenizer::Token> &Tokens, std::vector<Token>::iterator& currentToken, Data& data);
         static void LDRInstruction(std::vector<SASM::Tokenizer::Token> &Tokens, std::vector<Token>::iterator& currentToken, Data& data);
+        static void ADDInstruction(std::vector<SASM::Tokenizer::Token> &Tokens, std::vector<Token>::iterator& currentToken, Data& data);
+        static void SUBInstruction(std::vector<SASM::Tokenizer::Token> &Tokens, std::vector<Token>::iterator& currentToken, Data& data);
     };
 }

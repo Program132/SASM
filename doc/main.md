@@ -69,3 +69,4 @@ add_quotient:
 
 - [MOV Instruction](mov.md)
 - [STR Instruction](str.md)
+- [LDR Instruction](ldr.md)

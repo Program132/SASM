@@ -24,11 +24,7 @@ int main(int argc, char** argv) {
 
     std::vector<SASM::Tokenizer::Token> TokensCode = SASM::Tokenizer::Builder::ParserTokens(contentFile);
 
-    for (auto const& e : TokensCode) {
-        std::cout << e << std::endl;
-    }
-
-    SASM::Parser::MainParser(TokensCode);
+    SASM::Parser::Parser::MainParser(TokensCode);
 
     return 0;
 }

@@ -13,6 +13,7 @@ using namespace SASM;
 using namespace SASM::Lexer;
 
 std::optional<Token> ExpectInstruction(std::vector<Token>::iterator &current, std::vector<Token>& tokens);
+std::optional<Token> ExpectGoto(std::vector<Token>::iterator &current, std::vector<Token>& tokens);
 std::optional<Token> ExpectOperator(std::vector<Token>::iterator &current, std::vector<Token>& tokens, std::string_view o);
 std::optional<Token> ExpectValue(std::vector<Token>::iterator &current, std::vector<Token>& tokens);
 std::optional<Token> ExpectRegister(std::vector<Token>::iterator &current, std::vector<Token>& tokens);

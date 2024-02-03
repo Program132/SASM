@@ -18,7 +18,8 @@ namespace SASM::Lexer {
         "IDENTIFIANT",
         "INT",
         "OPERATOR",
-        "POSSIBLE_REGISTER"
+        "POSSIBLE_REGISTER",
+        "POSSIBLE_GOTO"
     };
 
     class Token {

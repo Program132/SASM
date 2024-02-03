@@ -1,7 +1,8 @@
-MOV R0, #5
-STR R0, 100
-LDR R1, 100
-ADD R3, R0, R1
-MOV R4, #100
-SUB R5, R4, R1
-ADD R6, R5, R1
+MOV R1, #10
+B hi
+
+hi:
+    MOV R0, #5
+    B bye
+bye:
+    MOV R3, #5651564

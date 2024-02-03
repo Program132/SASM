@@ -36,7 +36,6 @@ namespace SASM::Parser {
 
         while (current != listTokens.end()) {
             if (!managerInstructions(current, listTokens, data)) {
-                std::cerr << "Unknown : " << current->content << std::endl;
                 ++current;
                 continue;
             }
@@ -67,6 +66,9 @@ namespace SASM::Parser {
             return true;
         } else if (instruction.has_value() && instruction->content == "SUB") {
             subInstruction(current, listTokens, data);
+            return true;
+        } else if (instruction.has_value() && instruction->content == "B") {
+            bInstruction(current, listTokens, data);
             return true;
         }
         return false;
@@ -244,5 +246,27 @@ namespace SASM::Parser {
             std::cerr << "Error: The registers are not valid. Ex: 'SUB R3, R1, R2'" << std::endl;
             exit(7);
         }
+    }
+
+    void bInstruction(std::vector<Token>::iterator& current, std::vector<Token>& listTokens, Data& data) {
+        auto gotoLoc = ExpectInstruction(current, listTokens);
+        if (!gotoLoc.has_value()) {
+            std::cerr << "Error: You need to specify the name of the location. Ex: 'B hello'" << std::endl;
+            exit(8);
+        }
+        int indexGoto = -1;
+        for (int i = 0; i < listTokens.size(); ++i) {
+            if (listTokens[i].content == gotoLoc->content) {
+                indexGoto = i;
+                break;
+            }
+        }
+
+        if (indexGoto == -1) {
+            std::cerr << "Error: You need to specify the name of the location. Ex: 'B hello'" << std::endl;
+            exit(8);
+        }
+
+        current = listTokens.begin() + indexGoto;
     }
 }

@@ -24,7 +24,7 @@ int main(int const argc, char** argv) {
 
     std::vector<SASM::Lexer::Token> TokensCode = SASM::Lexer::Lexer(contentFile);
 
-    // for (auto const& token : TokensCode) { std::cout << token << std::endl; }
+    //for (auto const& token : TokensCode) { std::cout << token << std::endl; }
 
     SASM::Parser::parseTokens(TokensCode);
 

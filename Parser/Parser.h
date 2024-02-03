@@ -34,4 +34,5 @@ namespace SASM::Parser {
     void ldrInstruction(std::vector<Token>::iterator& current, std::vector<Token>& listTokens, Data& data);
     void addInstruction(std::vector<Token>::iterator& current, std::vector<Token>& listTokens, Data& data);
     void subInstruction(std::vector<Token>::iterator& current, std::vector<Token>& listTokens, Data& data);
+    void bInstruction(std::vector<Token>::iterator& current, std::vector<Token>& listTokens, Data& data); // Goto
 }

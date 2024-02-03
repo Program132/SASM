@@ -9,6 +9,15 @@ std::optional<Token> ExpectInstruction(std::vector<Token>::iterator &current, st
     return std::nullopt;
 }
 
+std::optional<Token> ExpectGoto(std::vector<Token>::iterator &current, std::vector<Token>& tokens) {
+    if (current->type == POSSIBLE_GOTO) {
+        auto returnt = current;
+        current++;
+        return *returnt;
+    }
+    return std::nullopt;
+}
+
 std::optional<Token> ExpectRegister(std::vector<Token>::iterator &current, std::vector<Token>& tokens) {
     if (current->type == POSSIBLE_REGISTER) {
         auto returnt = current;

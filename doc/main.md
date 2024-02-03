@@ -3,10 +3,9 @@
 ## Description
 
 SASM is a programming language made in C++ inspired by the basic ASM.
-The goal is to give an example to students of a little programming language (parser).
-I am not using a compiler !
+It's not using a compiler ! By the way, it shows to students how they can create an interpreted programming languages.
 
-WARNING: The language is like an emulator, it's not saved in your real memory
+WARNING: The language is like an emulator, it's not saved in your real memory !
 
 Example in basic ASM (goal of this code: **Pythagore's theorem**):
 ```
@@ -64,6 +63,8 @@ add_quotient:
       ADD R8, R8, #1
       HALT
 ```
+
+At the end of your code, you have the values of every registers declared in your program !
 
 ## Links to the documentation
 

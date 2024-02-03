@@ -3,4 +3,16 @@ project(SASM)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(SASM main.cpp src/Tokenizer/TokenClass.cpp src/Tokenizer/TokenClass.h src/Parser/Parser.cpp src/Parser/Parser.h src/Expecter/Expecter.cpp src/Expecter/Expecter.h src/Definitions/Register.cpp src/Definitions/Register.h src/Utils/Data.cpp src/Utils/Data.h src/Definitions/Memory.cpp src/Definitions/Memory.h)
+add_executable(SASM
+        main.cpp
+        Lexer/Lexer.cpp
+        Lexer/Lexer.h
+        Parser/Parser.cpp
+        Parser/Parser.h
+        Memory/Memory.cpp
+        Memory/Memory.h
+        Register/Register.cpp
+        Register/Register.h
+        Expecter/Expecter.cpp
+        Expecter/Expecter.h
+)

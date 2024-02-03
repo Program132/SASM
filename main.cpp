@@ -1,15 +1,15 @@
 #include <iostream>
 #include <fstream>
 
-#include "src/Tokenizer/TokenClass.h"
-#include "src/Parser/Parser.h"
+#include "Lexer/Lexer.h"
+#include "Parser/Parser.h"
 
-int main(int argc, char** argv) {
+int main(int const argc, char** argv) {
     std::string pos_FileName;
     if (argc == 2) {
         pos_FileName = argv[1];
     } else {
-        std::cout << "File : ";
+        std::cout << "File: ";
         std::cin >> pos_FileName;
         std::cout << std::endl;
     }
@@ -22,9 +22,11 @@ int main(int argc, char** argv) {
 
     std::string contentFile((std::istreambuf_iterator<char>(possibleFile)), (std::istreambuf_iterator<char>()));
 
-    std::vector<SASM::Tokenizer::Token> TokensCode = SASM::Tokenizer::Builder::ParserTokens(contentFile);
+    std::vector<SASM::Lexer::Token> TokensCode = SASM::Lexer::Lexer(contentFile);
 
-    SASM::Parser::Parser::MainParser(TokensCode);
+    // for (auto const& token : TokensCode) { std::cout << token << std::endl; }
+
+    SASM::Parser::parseTokens(TokensCode);
 
     return 0;
 }

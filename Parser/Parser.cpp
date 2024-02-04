@@ -259,6 +259,56 @@ namespace SASM::Parser {
         }
         int indexGoto = -1;
         for (int i = 0; i < listTokens.size(); ++i) {
+            if (listTokens[i].content == gotoLoc->content+":") {
+                indexGoto = i;
+                break;
+            }
+        }
+        if (indexGoto == -1) {
+            std::cerr << "Error: You need to specify the name of the location. Ex: 'B hello'" << std::endl;
+            exit(8);
+        }
+
+        current = listTokens.begin() + indexGoto;
+    }
+
+    void cmpInstruction(std::vector<Token>::iterator& current, std::vector<Token>& listTokens, Data& data) {
+        auto targetRegister = ExpectRegister(current, listTokens);
+        if (!targetRegister.has_value()) {
+            std::cerr << "Error: Need the register (R0 to R12). Ex: 'CMP R0, #14'" << std::endl;
+            exit(1);
+        }
+
+        if (!ExpectOperator(current, listTokens, ",").has_value()) {
+            std::cerr << "Error: Need ','. Ex: 'CMP R8, #800'" << std::endl;
+            exit(2);
+        }
+
+        if (!ExpectOperator(current, listTokens, "#").has_value()) {
+            std::cerr << "Error: Need '#'. Ex: 'CMP R1, #3'" << std::endl;
+            exit(3);
+        }
+
+        auto targetValue = ExpectValue(current, listTokens);
+        if (!targetValue.has_value()) {
+            std::cerr << "Error: Need a value to compare with the register. Ex: 'CMP R3, #7'" << std::endl;
+            exit(4);
+        }
+
+        auto conditionalOperator = ExpectInstruction(current, listTokens); // BGE, BGT, BLE, BLT or BEQ
+        if (!conditionalOperator.has_value() || (conditionalOperator->content != "BGE" && conditionalOperator->content != "BGT" && conditionalOperator->content != "BLE" && conditionalOperator->content != "BLT" && conditionalOperator->content != "BEQ")) {
+            std::cerr << "Error: Need the conditional action. Ex: 'BGE condition_true'" << std::endl;
+            exit(9);
+        }
+
+        auto gotoLoc = ExpectInstruction(current, listTokens);
+        if (!gotoLoc.has_value()) {
+            std::cerr << "Error: You need to specify the name of the location. Ex: 'B hello'" << std::endl;
+            exit(8);
+        }
+
+        int indexGoto = -1;
+        for (int i = 0; i < listTokens.size(); ++i) {
             if (listTokens[i].content == gotoLoc->content) {
                 indexGoto = i;
                 break;
@@ -270,10 +320,25 @@ namespace SASM::Parser {
             exit(8);
         }
 
-        current = listTokens.begin() + indexGoto;
-    }
+        auto R = data.getRegister(targetRegister->content);
+        if (!R.has_value()) {
+            std::cerr << "Error: Need a valid register. Ex: 'CMP R12, #3'" << std::endl;
+            exit(7);
+        }
 
-    void cmpInstruction(std::vector<Token>::iterator& current, std::vector<Token>& listTokens, Data& data) {
+        int vR = std::stoi(R->getValue());
+        int vComp = std::stoi(targetValue->content);
 
+        if (conditionalOperator->content == "BGE" && vR >= vComp) { // >=
+            current = listTokens.begin() + indexGoto;
+        } else if (conditionalOperator->content == "BGT" && vR > vComp) { // >
+            current = listTokens.begin() + indexGoto;
+        } else if (conditionalOperator->content == "BLE" && vR <= vComp) { // <=
+            current = listTokens.begin() + indexGoto;
+        } else if (conditionalOperator->content == "BLT" && vR < vComp) { // <
+            current = listTokens.begin() + indexGoto;
+        } else if (conditionalOperator->content == "BEQ" && vR == vComp) { // ==
+            current = listTokens.begin() + indexGoto;
+        }
     }
 }

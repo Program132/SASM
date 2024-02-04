@@ -1,8 +1,13 @@
-MOV R1, #10
-B hi
+MOV R0, #9
 
-hi:
-    MOV R0, #5
-    B bye
-bye:
-    MOV R3, #5651564
+CMP R0, #20
+BGE condition_true
+
+MOV R1, #1
+B end
+
+condition_true:
+    MOV R1, #0
+
+end:
+    MOV R2, #99

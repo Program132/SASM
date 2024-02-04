@@ -309,7 +309,7 @@ namespace SASM::Parser {
 
         int indexGoto = -1;
         for (int i = 0; i < listTokens.size(); ++i) {
-            if (listTokens[i].content == gotoLoc->content) {
+            if (listTokens[i].content == gotoLoc->content+":") {
                 indexGoto = i;
                 break;
             }

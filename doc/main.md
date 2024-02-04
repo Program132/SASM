@@ -68,6 +68,7 @@ At the end of your code, you have the values of every registers declared in your
 
 ## Links to the documentation
 
+- [Error Codes](errors.md)
 - [MOV Instruction](mov.md)
 - [STR Instruction](str.md)
 - [LDR Instruction](ldr.md)

@@ -5,9 +5,12 @@ The first thing you need to know is the first instruction ``CMP`` which means "C
 
 Format: ``CMP Re, #Value``
 
+Warning: if the condition return "false", make sure to do a jump to don't run content from the label if the condition was true.
+
 ## Greater or Equal (BGE)
 
 Format: ``BGE label``
+
 Example: 
 ```
 MOV R0, #10
@@ -29,6 +32,7 @@ condition_true2:
 ## Greater (BGT)
 
 Format: ``BGT label``
+
 Example:
 ```
 MOV R0, #10
@@ -49,6 +53,7 @@ condition_true2:
 ## Lower or Equal (BLE)
 
 Format: ``BLE label``
+
 Example:
 ```
 MOV R0, #25
@@ -69,6 +74,7 @@ condition_true2:
 ## Lower (BLT)
 
 Format: ``BLT label``
+
 Example:
 ```
 MOV R0, #25
@@ -89,6 +95,7 @@ condition_true2:
 ## Lower (BEQ)
 
 Format: ``BEQ label``
+
 Example:
 ```
 MOV R0, #30

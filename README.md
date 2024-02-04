@@ -29,5 +29,5 @@ The files with the name "Expecter" are used to obtain the desired arguments, in 
 
 ## Links
 
+- [Profile](https://github.com/Program132)
 - [Documentation of SASM](doc/main.md)
-- [Conditions Instructions in basic ASM](https://chortle.ccsu.edu/assemblytutorial/Chapter-24/ass24_4.html)

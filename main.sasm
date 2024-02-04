@@ -1,8 +1,7 @@
 MOV R0, #9
 
-CMP R0, #20
+CMP R0, #9
 BGE condition_true
-
 MOV R1, #1
 B end
 

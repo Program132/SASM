@@ -28,7 +28,9 @@ namespace SASM::Parser {
 
     void parseTokens(std::vector<Token>& listTokens);
     bool managerInstructions(std::vector<Token>::iterator& current, std::vector<Token>& listTokens, Data& data);
+    void logsEndProgram(Data& data);
 
+    void haltInstruction(std::vector<Token>::iterator& current, std::vector<Token>& listTokens, Data& data); // stopping the program
     void movInstruction(std::vector<Token>::iterator& current, std::vector<Token>& listTokens, Data& data);
     void strInstruction(std::vector<Token>::iterator& current, std::vector<Token>& listTokens, Data& data);
     void ldrInstruction(std::vector<Token>::iterator& current, std::vector<Token>& listTokens, Data& data);

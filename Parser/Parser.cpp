@@ -29,6 +29,15 @@ namespace SASM::Parser {
 
     // Parser :
 
+    void logsEndProgram(Data& data) {
+        for (auto& r : data.Registers) {
+            std::cout << "Register Name: " << r.second.getName() << ", value: " << r.second.getValue() << std::endl;
+        }
+        for (auto& r : data.Memories) {
+            std::cout << "Memory Slot: " << r.second.getSlot() << ", value: " << r.second.getValue() << std::endl;
+        }
+    }
+
     void parseTokens(std::vector<Token>& listTokens) {
         Data data;
 
@@ -41,18 +50,15 @@ namespace SASM::Parser {
             }
         }
 
-        // Logs :
-        for (auto& r : data.Registers) {
-            std::cout << "Register Name: " << r.second.getName() << ", value: " << r.second.getValue() << std::endl;
-        }
-        for (auto& r : data.Memories) {
-            std::cout << "Memory Slot: " << r.second.getSlot() << ", value: " << r.second.getValue() << std::endl;
-        }
+        logsEndProgram(data); // for logs (to see the values of registers + memories)
     }
 
     bool managerInstructions(std::vector<Token>::iterator& current,std::vector<Token>& listTokens, Data& data) {
         auto instruction = ExpectInstruction(current, listTokens);
-        if (instruction.has_value() && instruction->content == "MOV") {
+        if (instruction.has_value() && instruction->content == "HALT") {
+            haltInstruction(current, listTokens, data);
+            return true;
+        } else if (instruction.has_value() && instruction->content == "MOV") {
             movInstruction(current, listTokens, data);
             return true;
         } else if (instruction.has_value() && instruction->content == "STR") {
@@ -75,6 +81,11 @@ namespace SASM::Parser {
             return true;
         }
         return false;
+    }
+
+    void haltInstruction(std::vector<Token>::iterator& current, std::vector<Token>& listTokens, Data& data) {
+        logsEndProgram(data); // for logs (to see the values of registers + memories)
+        exit(0);
     }
 
     void movInstruction(std::vector<Token>::iterator& current, std::vector<Token>& listTokens, Data& data) {

@@ -4,12 +4,18 @@
 #include "Lexer/Lexer.h"
 #include "Parser/Parser.h"
 
+#ifdef _WIN32
+#include <conio.h>
+#else
+#include <unistd.h>
+#endif
+
 int main(int const argc, char** argv) {
     std::string pos_FileName;
     if (argc == 2) {
         pos_FileName = argv[1];
     } else {
-        std::cout << "File: ";
+        std::cout << "Path to file: ";
         std::cin >> pos_FileName;
         std::cout << std::endl;
     }
@@ -24,9 +30,16 @@ int main(int const argc, char** argv) {
 
     std::vector<SASM::Lexer::Token> TokensCode = SASM::Lexer::Lexer(contentFile);
 
-    //for (auto const& token : TokensCode) { std::cout << token << std::endl; }
+    // for (auto const& token : TokensCode) { std::cout << token << std::endl; }
 
     SASM::Parser::parseTokens(TokensCode);
 
+#ifdef _WIN32
+    std::cout << "Press any key to close...";
+    _getch();
+#else
+    std::cout << "Press Enter to close...";
+    std::cin.ignore();
+#endif
     return 0;
 }

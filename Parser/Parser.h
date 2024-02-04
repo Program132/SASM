@@ -35,4 +35,5 @@ namespace SASM::Parser {
     void addInstruction(std::vector<Token>::iterator& current, std::vector<Token>& listTokens, Data& data);
     void subInstruction(std::vector<Token>::iterator& current, std::vector<Token>& listTokens, Data& data);
     void bInstruction(std::vector<Token>::iterator& current, std::vector<Token>& listTokens, Data& data); // Goto
+    void cmpInstruction(std::vector<Token>::iterator& current, std::vector<Token>& listTokens, Data& data); // for conditions
 }

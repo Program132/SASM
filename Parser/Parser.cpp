@@ -70,6 +70,9 @@ namespace SASM::Parser {
         } else if (instruction.has_value() && instruction->content == "B") {
             bInstruction(current, listTokens, data);
             return true;
+        } else if (instruction.has_value() && instruction->content == "CMP") {
+            cmpInstruction(current, listTokens, data);
+            return true;
         }
         return false;
     }
@@ -268,5 +271,9 @@ namespace SASM::Parser {
         }
 
         current = listTokens.begin() + indexGoto;
+    }
+
+    void cmpInstruction(std::vector<Token>::iterator& current, std::vector<Token>& listTokens, Data& data) {
+
     }
 }

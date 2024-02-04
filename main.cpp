@@ -4,12 +4,6 @@
 #include "Lexer/Lexer.h"
 #include "Parser/Parser.h"
 
-#ifdef _WIN32
-#include <conio.h>
-#else
-#include <unistd.h>
-#endif
-
 int main(int const argc, char** argv) {
     std::string pos_FileName;
     if (argc == 2) {
@@ -34,12 +28,5 @@ int main(int const argc, char** argv) {
 
     SASM::Parser::parseTokens(TokensCode);
 
-#ifdef _WIN32
-    std::cout << "Press any key to close...";
-    _getch();
-#else
-    std::cout << "Press Enter to close...";
-    std::cin.ignore();
-#endif
     return 0;
 }

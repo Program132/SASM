@@ -74,3 +74,4 @@ At the end of your code, you have the values of every registers declared in your
 - [ADD Instruction](add.md)
 - [SUB Instruction](sub.md)
 - [B Instruction](b.md)
+- [Conditions Instructions](conditions.md)

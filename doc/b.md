@@ -1,9 +1,9 @@
 # B Instruction
 
-**B** is a way to jump to another location (like in C++ with *goto*, or you understand this like a 'function' but with no arguments inside).
+**B** is a way to jump to another location called **label** (like in C++ with *goto*, or you understand this like a 'function' but with no arguments inside).
 
 ## Format
-``B goto_name``
+``B label``
 
 ## Example
 ```

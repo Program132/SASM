@@ -29,6 +29,36 @@ namespace SASM::Parser {
 
     // Parser :
 
+    int getValueOrFromRegister(std::vector<Token>::iterator& current, std::vector<Token>& listTokens, Data& data) {
+        int value;
+
+        if (ExpectOperator(current, listTokens, "#").has_value()) { // waiting value
+            auto targetRegisterValue = ExpectValue(current, listTokens);
+            if (!targetRegisterValue.has_value()) {
+                std::cerr << "Error: Need a value for the register. Ex: 'MOV R3, #7'" << std::endl;
+                exit(4);
+            }
+
+            value = std::stoi(targetRegisterValue->content);
+        } else {
+            auto registerForValue = ExpectRegister(current, listTokens);
+
+            if (!registerForValue.has_value()) {
+                std::cerr << "Error: Need '#' or a register. Ex: 'MOV R1, #3'" << std::endl;
+                exit(3);
+            }
+
+            if (!data.getRegister(registerForValue->content).has_value()) {
+                std::cerr << "Error: A register is not valid. Ex: 'MOV R3, R1'" << std::endl;
+                exit(7);
+            }
+
+            value = std::stoi(data.getRegister(registerForValue->content)->getValue());
+        }
+
+        return value;
+    }
+
     void logsEndProgram(Data& data) {
         for (auto& r : data.Registers) {
             std::cout << "Register Name: " << r.second.getName() << ", value: " << r.second.getValue() << std::endl;
@@ -100,24 +130,15 @@ namespace SASM::Parser {
             exit(2);
         }
 
-        if (!ExpectOperator(current, listTokens, "#").has_value()) {
-            std::cerr << "Error: Need '#'. Ex: 'MOV R1, #3'" << std::endl;
-            exit(3);
-        }
-
-        auto targetRegisterValue = ExpectValue(current, listTokens);
-        if (!targetRegisterValue.has_value()) {
-            std::cerr << "Error: Need a value for the register. Ex: 'MOV R3, #7'" << std::endl;
-            exit(4);
-        }
-
         if (std::stoi(targetRegister->content.substr(1)) > 12) {
             std::cerr << "Error: There is a maximum of 13 registers (R0 to R12). Ex: 'MOV R12, #5'" << std::endl;
             exit(5);
         }
 
-        Definitions::Register r(targetRegister->content, targetRegisterValue->content);
-        data.push_register(r);
+        int value = getValueOrFromRegister(current, listTokens, data);
+
+        Definitions::Register r(targetRegister->content, std::to_string(value));
+        data.push_register(r);;
     }
 
     void strInstruction(std::vector<Token>::iterator& current, std::vector<Token>& listTokens, Data& data) {
@@ -190,76 +211,46 @@ namespace SASM::Parser {
             exit(2);
         }
 
-        auto first = ExpectRegister(current, listTokens);
-        if (!first.has_value()) {
-            std::cerr << "Error: Need the register (R0 to R12). Ex: 'ADD R3, R1, R2'" << std::endl;
-            exit(1);
-        }
+        auto first  = getValueOrFromRegister(current, listTokens, data);
 
         if (!ExpectOperator(current, listTokens, ",").has_value()) {
-            std::cerr << "Error: Need ','. Ex: 'STR R1, 20'" << std::endl;
+            std::cerr << "Error: Need ','. Ex: 'ADD R3, R1, R10'" << std::endl;
             exit(2);
         }
 
-        auto second = ExpectRegister(current, listTokens);
-        if (!first.has_value()) {
-            std::cerr << "Error: Need the register (R0 to R12). Ex: 'ADD R3, R1, R2'" << std::endl;
-            exit(1);
-        }
+        auto second = getValueOrFromRegister(current, listTokens, data);
 
-        auto R1 = data.getRegister(first->content);
-        auto R2 = data.getRegister(second->content);
-        if (R1.has_value() && R2.has_value()) {
-            Definitions::Register r(toSave->content,
-                                    std::to_string(std::stoi(R1->getValue()) + std::stoi(R2->getValue()))
-                                    );
-            data.push_register(r);
-        } else {
-            std::cerr << "Error: The registers are not valid. Ex: 'ADD R3, R1, R2'" << std::endl;
-            exit(7);
-        }
+        Definitions::Register r(toSave->content,
+                                std::to_string(first + second)
+        );
+        data.push_register(r);
     }
 
     void subInstruction(std::vector<Token>::iterator& current, std::vector<Token>& listTokens, Data& data) {
         auto toSave = ExpectRegister(current, listTokens);
         if (!toSave.has_value()) {
-            std::cerr << "Error: Need the register (R0 to R12). Ex: 'SUB R3, R1, R2'" << std::endl;
+            std::cerr << "Error: Need the register (R0 to R12). Ex: 'ADD R3, R1, R2'" << std::endl;
             exit(1);
         }
 
         if (!ExpectOperator(current, listTokens, ",").has_value()) {
-            std::cerr << "Error: Need ','. Ex: 'SUB R3, R1, R2'" << std::endl;
+            std::cerr << "Error: Need ','. Ex: 'ADD R3, R1, R2'" << std::endl;
             exit(2);
         }
 
-        auto first = ExpectRegister(current, listTokens);
-        if (!first.has_value()) {
-            std::cerr << "Error: Need the register (R0 to R12). Ex: 'SUB R3, R1, R2'" << std::endl;
-            exit(1);
-        }
+        auto first  = getValueOrFromRegister(current, listTokens, data);
 
         if (!ExpectOperator(current, listTokens, ",").has_value()) {
             std::cerr << "Error: Need ','. Ex: 'STR R1, 20'" << std::endl;
             exit(2);
         }
 
-        auto second = ExpectRegister(current, listTokens);
-        if (!first.has_value()) {
-            std::cerr << "Error: Need the register (R0 to R12). Ex: 'SUB R3, R1, R2'" << std::endl;
-            exit(1);
-        }
+        auto second = getValueOrFromRegister(current, listTokens, data);
 
-        auto R1 = data.getRegister(first->content);
-        auto R2 = data.getRegister(second->content);
-        if (R1.has_value() && R2.has_value()) {
-            Definitions::Register r(toSave->content,
-                                    std::to_string(std::stoi(R1->getValue()) - std::stoi(R2->getValue()))
-            );
-            data.push_register(r);
-        } else {
-            std::cerr << "Error: The registers are not valid. Ex: 'SUB R3, R1, R2'" << std::endl;
-            exit(7);
-        }
+        Definitions::Register r(toSave->content,
+                                std::to_string(first - second)
+        );
+        data.push_register(r);
     }
 
     void bInstruction(std::vector<Token>::iterator& current, std::vector<Token>& listTokens, Data& data) {

@@ -40,7 +40,7 @@ namespace SASM::Parser {
             }
 
             value = std::stoi(targetRegisterValue->content);
-        } else {
+        } else { // maybe a register
             auto registerForValue = ExpectRegister(current, listTokens);
 
             if (!registerForValue.has_value()) {

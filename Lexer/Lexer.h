@@ -26,6 +26,7 @@ namespace SASM::Lexer {
     public:
         enum Types type = WHITESPACE;
         std::string content;
+        size_t line = 1;
         friend std::ostream& operator<<(std::ostream& flux, Token const& token);
     };
 
